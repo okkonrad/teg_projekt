@@ -1,0 +1,11 @@
+Title: B2B SaaS Frontend Modernization
+Description: Rewrite the core web app for improved UX and performance.
+Required Skills: TypeScript (Advanced), React (Advanced), Next.js (Intermediate), CSS (Advanced)
+Budget: 90000
+Max Rate: 140
+Team Size: 2
+Duration Weeks: 10
+Seniority: Mid
+Min Years Experience: 4
+Availability Min Pct: 50
+Timezone: UTC+2

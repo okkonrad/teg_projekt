@@ -1,0 +1,53 @@
+{
+  "candidates": [
+    {
+      "id": "cand-1",
+      "name": "Alice Python",
+      "email": "alice@example.com",
+      "location": "Remote",
+      "hourly_rate": 100,
+      "skills": [{"name": "Python", "proficiency": "Advanced"}],
+      "assignments": [
+        {"project_name": "Proj A", "allocation": 50, "start_date": "2020-01-01", "end_date": "2099-12-31"}
+      ],
+      "certifications": [{"name": "AWS Certified", "provider": "AWS"}],
+      "education": [{"university": "MIT", "degree": "BSc", "graduation_year": 2020}]
+    },
+    {
+      "id": "cand-2",
+      "name": "Bob Python",
+      "email": "bob@example.com",
+      "location": "Remote",
+      "hourly_rate": 90,
+      "skills": [{"name": "Python", "proficiency": "Intermediate"}],
+      "assignments": [],
+      "certifications": [{"name": "AWS Certified", "provider": "AWS"}],
+      "education": [{"university": "UW", "degree": "MSc", "graduation_year": 2018}]
+    },
+    {
+      "id": "cand-3",
+      "name": "Cara Python",
+      "email": "cara@example.com",
+      "location": "Remote",
+      "hourly_rate": 110,
+      "skills": [{"name": "Python", "proficiency": "Expert"}],
+      "assignments": [
+        {"project_name": "Proj B", "allocation": 100, "start_date": "2020-01-01", "end_date": "2099-12-31"}
+      ],
+      "certifications": [],
+      "education": []
+    },
+    {
+      "id": "cand-4",
+      "name": "Dave Java",
+      "email": "dave@example.com",
+      "location": "Remote",
+      "hourly_rate": 80,
+      "skills": [{"name": "Java", "proficiency": "Intermediate"}],
+      "assignments": [],
+      "certifications": [],
+      "education": []
+    }
+  ],
+  "rfps": []
+}

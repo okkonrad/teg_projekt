@@ -1,0 +1,11 @@
+Title: Mobile SDK and API Integration
+Description: Deliver a mobile SDK and supporting API for in-app analytics.
+Required Skills: Kotlin (Intermediate), Swift (Intermediate), REST (Intermediate), CI/CD (Intermediate)
+Budget: 110000
+Max Rate: 160
+Team Size: 3
+Duration Weeks: 12
+Seniority: Mid
+Min Years Experience: 3
+Availability Min Pct: 60
+Timezone: UTC+0

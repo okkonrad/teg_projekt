@@ -1,0 +1,11 @@
+Title: Data Platform Ingestion Pipeline
+Description: Create an ingestion and transformation pipeline for analytics and reporting.
+Required Skills: Python (Advanced), Apache Airflow (Intermediate), SQL (Advanced), AWS S3 (Intermediate)
+Budget: 180000
+Max Rate: 190
+Team Size: 4
+Duration Weeks: 16
+Seniority: Senior
+Min Years Experience: 5
+Availability Min Pct: 70
+Timezone: UTC

@@ -1,0 +1,11 @@
+Title: FinTech Payments Platform
+Description: Build a scalable payments API and dashboard for a fintech client.
+Required Skills: Python (Advanced), FastAPI (Intermediate), PostgreSQL (Intermediate)
+Budget: 120000
+Max Rate: 150
+Team Size: 3
+Duration Weeks: 12
+Seniority: Senior
+Min Years Experience: 5
+Availability Min Pct: 50
+Timezone: UTC+1

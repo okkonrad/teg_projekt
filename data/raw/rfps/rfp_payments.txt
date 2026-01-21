@@ -1,0 +1,11 @@
+Title: Retail Payments Orchestration
+Description: Build a payment routing service with provider failover and reconciliation for a retail client.
+Required Skills: Python (Advanced), FastAPI (Advanced), PostgreSQL (Intermediate), Redis (Intermediate)
+Budget: 150000
+Max Rate: 170
+Team Size: 3
+Duration Weeks: 14
+Seniority: Senior
+Min Years Experience: 6
+Availability Min Pct: 60
+Timezone: UTC+1

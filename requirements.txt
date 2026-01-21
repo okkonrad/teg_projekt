@@ -1,0 +1,14 @@
+email-validator>=2.3.0
+faker>=40.1.2
+langchain>=1.2.6
+langchain-community>=0.4.1
+langchain-experimental>=0.3.0
+langchain-openai>=1.1.7
+openai>=1.99.0
+neo4j>=6.1.0
+pydantic>=2.12.5
+python-dotenv>=1.2.1
+streamlit>=1.53.0
+watchdog>=6.0.0
+reportlab>=4.0.0
+pypdf>=5.0.0

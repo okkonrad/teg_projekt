@@ -1,0 +1,11 @@
+Title: Product Recommendations Service
+Description: Build a recommendation API with offline training and online inference.
+Required Skills: Python (Advanced), Scikit-learn (Intermediate), FastAPI (Intermediate), Docker (Intermediate)
+Budget: 160000
+Max Rate: 180
+Team Size: 3
+Duration Weeks: 15
+Seniority: Senior
+Min Years Experience: 5
+Availability Min Pct: 60
+Timezone: UTC-5
