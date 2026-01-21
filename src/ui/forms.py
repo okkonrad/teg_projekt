@@ -1,6 +1,12 @@
 import sys
 import uuid
 from pathlib import Path
+from typing import List
+
+from faker.generator import random
+
+from src.data import GraphLoader, DataGenerator
+from src.domain.schemas import Candidate, RFP
 
 REPO_ROOT = Path(__file__).resolve()
 for parent in REPO_ROOT.parents:
@@ -37,7 +43,7 @@ def _parse_list(raw: str) -> list[str]:
 def render():
     st.header("Add Data")
     
-    tab1, tab2, tab3 = st.tabs(["Add Candidate", "Add RFP", "Seed Data"])
+    tab1, tab2, tab3 = st.tabs(["Add Candidate", "Add RFP", "Generate Candidates"])
     service = GraphService()
 
     try:
@@ -134,24 +140,24 @@ def render():
         with tab3:
             st.subheader("Seed sample data")
             st.caption("Generates sample candidates and RFPs and loads them into Neo4j.")
+
             seed_candidates = st.number_input("Candidates", min_value=5, max_value=200, value=30)
             seed_rfps = st.number_input("RFPs", min_value=1, max_value=20, value=5)
             if st.button("Seed now"):
-                try:
-                    from src.data.generator import DataGenerator
-                    from src.data.loader import GraphLoader, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
 
-                    gen = DataGenerator()
-                    candidates = [gen.generate_candidate().model_dump() for _ in range(int(seed_candidates))]
-                    rfps = [gen.generate_rfp().model_dump() for _ in range(int(seed_rfps))]
-                    loader = GraphLoader(NEO4J_URI, (NEO4J_USER, NEO4J_PASSWORD))
-                    try:
-                        loader.load_candidates(candidates)
-                        loader.load_rfps(rfps)
-                    finally:
+                generator = DataGenerator(seed=random.randint(0,100))
+                candidates: List[Candidate] = [generator.generate_candidate() for _ in range(seed_candidates)]
+                st.info(f"Generating candidated and rfps, please be patient...")
+                rpfs: List[RFP] = [generator.generate_rfp() for _ in range(seed_rfps)]
+                loader = GraphLoader()
+                try:
+                    loader.load_candidates_from_model(candidates)
+                    loader.load_rfps_from_model(rpfs)
+                except Exception as e:
+                    st.error(f"Could not load candidated to the Neo4j: {e}")
+                finally:
+                    if loader is not None:
                         loader.close()
-                    st.success(f"Seeded {len(candidates)} candidates and {len(rfps)} RFPs.")
-                except Exception as exc:
-                    st.error(f"Seed failed: {exc}")
+                st.success(f"Successfully generated {len(candidates)} candidates and {len(rpfs)} RFPs!")
     finally:
         service.close()

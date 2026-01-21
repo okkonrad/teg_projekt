@@ -18,10 +18,10 @@ st.set_page_config(
 
 # Sidebar Navigation
 with st.sidebar:
-    st.title("Graph RAG")
+    st.title("AIMatcheME")
     page = st.radio("Navigation", ["Chat Assistant", "Candidate Browser", "RFP Browser", "BI Dashboard", "Add Data", "Generator"])
     st.divider()
-    st.caption("v0.5.0 - Stage 5")
+    st.caption("v0.5.1 - Stage 5")
 
 # Routing
 if page == "Chat Assistant":

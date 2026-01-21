@@ -1,15 +1,16 @@
 import os
+from dotenv import load_dotenv
 from typing import Dict, List, Optional
-
 from neo4j import GraphDatabase
 
+load_dotenv()
 
 class GraphService:
     def __init__(self):
-        uri = os.getenv("NEO4J_URI", "bolt://localhost:7687")
-        user = os.getenv("NEO4J_USERNAME", "neo4j")
-        password = os.getenv("NEO4J_PASSWORD", "password")
-        self.driver = GraphDatabase.driver(uri, auth=(user, password))
+        self.uri = os.getenv("NEO4J_URI", "bolt://localhost:7687")
+        self.user = os.getenv("NEO4J_USERNAME", "neo4j")
+        self.password = os.getenv("NEO4J_PASSWORD", "password")
+        self.driver = GraphDatabase.driver(self.uri, auth=(self.user, self.password))
 
     def close(self):
         self.driver.close()
