@@ -5,6 +5,8 @@ from glob import glob
 from pathlib import Path
 from typing import List
 
+
+
 REPO_ROOT = Path(__file__).resolve()
 for parent in REPO_ROOT.parents:
     if (parent / "pyproject.toml").exists():
@@ -18,6 +20,7 @@ from langchain_community.graphs import Neo4jGraph
 from langchain_openai import ChatOpenAI
 
 from src.data.pdf_parser import extract_text_from_pdf
+from src.services import get_normal_llm
 
 try:
     from langchain_experimental.graph_transformers import LLMGraphTransformer
@@ -88,7 +91,7 @@ def main() -> None:
     if args.clear_graph:
         graph.query("MATCH (n) DETACH DELETE n")
 
-    llm = ChatOpenAI(model=args.model, temperature=0)
+    llm = get_normal_llm()
     transformer = LLMGraphTransformer(
         llm=llm,
         allowed_nodes=DEFAULT_ALLOWED_NODES,

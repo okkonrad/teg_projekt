@@ -1,6 +1,9 @@
 import sys
+import os
 from pathlib import Path
 from typing import Dict, List
+
+
 
 REPO_ROOT = Path(__file__).resolve()
 for parent in REPO_ROOT.parents:
@@ -11,14 +14,16 @@ for parent in REPO_ROOT.parents:
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
+from dotenv import load_dotenv
 
 from src.engine.vector_ops import VectorService
+from src.services import get_normal_llm, get_embeddings_llm
 
 NO_MATCH_MESSAGE = (
     "No matches found. If this is unexpected, run "
     "'python3 -m src.scripts.prep_vectors' to build embeddings."
 )
-
+load_dotenv()
 
 def _summarize_results(results: List[Dict]) -> str:
     if not results:
@@ -108,7 +113,7 @@ class NaiveRetriever:
 class NaiveRAG:
     def __init__(self, model: str = "gpt-4o-mini", temperature: float = 0.2):
         self.retriever = NaiveRetriever()
-        self.llm = ChatOpenAI(temperature=temperature, model=model)
+        self.llm = get_normal_llm(temperature)
 
     def close(self):
         self.retriever.close()

@@ -1,10 +1,11 @@
+import os
 import re
 from pathlib import Path
 from typing import Any
 
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
-
+from src.services import get_normal_llm
 
 COMMON_SKILLS = [
     "Python",
@@ -260,7 +261,7 @@ def load_core_bi_questions(path: Path | None = None, limit: int = 10) -> list[st
 
 def generate_natural_response(prompt: str, count: int, mode: str, results: list | None = None) -> str:
     try:
-        chat = ChatOpenAI(temperature=0.4, model="gpt-4o-mini")
+        chat = get_normal_llm()
         context = f"Found {count} matches using {mode}."
         if results and len(results) > 0:
             top = results[0]

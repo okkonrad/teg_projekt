@@ -5,14 +5,17 @@ from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings
 from neo4j import GraphDatabase
 
+from src.services import get_embeddings_llm
+
 load_dotenv()
 
 class VectorService:
     def __init__(self):
-        self.embeddings = OpenAIEmbeddings(
-            model="text-embedding-3-small",
-            api_key=os.getenv("OPENAI_API_KEY")
-        )
+        # self.embeddings = OpenAIEmbeddings(
+        #     model="text-embedding-3-small",
+        #     api_key=os.getenv("OPENAI_API_KEY")
+        # )
+        self.embeddings = get_embeddings_llm()
         uri = os.getenv("NEO4J_URI", "bolt://localhost:7687")
         user = os.getenv("NEO4J_USERNAME", "neo4j")
         password = os.getenv("NEO4J_PASSWORD", "password")

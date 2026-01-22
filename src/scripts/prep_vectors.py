@@ -13,7 +13,7 @@ for parent in REPO_ROOT.parents:
 
 from src.engine.vector_ops import VectorService
 
-def main():
+def prepare_candidate_embeddings():
     print("Initializing Vector Service...")
     vs = VectorService()
     
