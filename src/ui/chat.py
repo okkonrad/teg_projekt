@@ -2,8 +2,13 @@ import json
 import subprocess
 import sys
 import time
+import os
 from datetime import datetime, timezone
 from pathlib import Path
+from dotenv import load_dotenv
+from openai import api_key
+
+from src.scripts import prepare_candidate_embeddings
 
 REPO_ROOT = Path(__file__).resolve()
 for parent in REPO_ROOT.parents:
@@ -18,13 +23,17 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from src.services.graph_service import GraphService
 from src.engine.matcher import Matcher
 from src.engine.naive import NaiveRAG
+from src.services.llm_service import get_normal_llm
 from src.engine.bi_helpers import load_core_bi_questions, run_graphrag_analytics
 
+load_dotenv()
 
 def extract_search_params(prompt: str) -> dict:
     """Uses LLM to extract structured search parameters from natural language."""
     try:
-        llm = ChatOpenAI(temperature=0, model="gpt-4o-mini")
+        print("Wczytawanie LLLM")
+
+        llm = get_normal_llm()
         schema = {
             "title": "Ad-Hoc Search",
             "max_rate": 200, # Default high
@@ -81,51 +90,51 @@ def _format_naive_metrics(payload: dict) -> str:
 def render():
     st.header("TalentMatch AI Assistant")
 
-    with st.expander("Question Bank", expanded=True):
-        st.caption("Select a PRD template and fill macros to copy a full question.")
-
-        QUESTION_TEMPLATES = [
-            "How many Python developers are available next month?",
-            "Count developers with AWS certifications",
-            "Find senior developers with React AND Node.js experience",
-            "List available developers in Pacific timezone",
-            "Average years of experience for machine learning projects",
-            "Total capacity available for Q4 projects",
-            "Find developers who worked together successfully",
-            "Developers from same university as our top performers",
-            "Who becomes available after current project ends?",
-            "Skills distribution by graduation year",
-            "Optimal team composition for FinTech RFP under budget constraints",
-            "Skills gaps analysis for upcoming project pipeline",
-            "Risk assessment: single points of failure in current assignments",
-        ]
-
-        service = GraphService()
-        try:
-            rfps = service.get_all_rfps()
-            all_skills = service.list_all_skills()
-        finally:
-            service.close()
-
-        rfp_options = [""] + [r["title"] for r in rfps]
-        selected_template = st.selectbox("Template", QUESTION_TEMPLATES)
-        selected_rfp = st.selectbox("Project macro (optional)", rfp_options)
-        selected_skills = st.multiselect("Skills macro (AND, optional)", all_skills)
-
-        question_text = selected_template
-        if "FinTech RFP" in question_text:
-            question_text = question_text.replace("FinTech RFP", selected_rfp or "FinTech RFP")
-        if selected_skills:
-            if "Python developers" in question_text:
-                question_text = question_text.replace(
-                    "Python developers", " and ".join(selected_skills) + " developers"
-                )
-            if "React AND Node.js" in question_text:
-                question_text = question_text.replace(
-                    "React AND Node.js", " AND ".join(selected_skills)
-                )
-
-        st.text_area("Generated question", question_text, height=80)
+    # with st.expander("Question Bank", expanded=True):
+    #     st.caption("Select a PRD template and fill macros to copy a full question.")
+    #
+    #     QUESTION_TEMPLATES = [
+    #         "How many Python developers are available next month?",
+    #         "Count developers with AWS certifications",
+    #         "Find senior developers with React AND Node.js experience",
+    #         "List available developers in Pacific timezone",
+    #         "Average years of experience for machine learning projects",
+    #         "Total capacity available for Q4 projects",
+    #         "Find developers who worked together successfully",
+    #         "Developers from same university as our top performers",
+    #         "Who becomes available after current project ends?",
+    #         "Skills distribution by graduation year",
+    #         "Optimal team composition for FinTech RFP under budget constraints",
+    #         "Skills gaps analysis for upcoming project pipeline",
+    #         "Risk assessment: single points of failure in current assignments",
+    #     ]
+    #
+    #     service = GraphService()
+    #     try:
+    #         rfps = service.get_all_rfps()
+    #         all_skills = service.list_all_skills()
+    #     finally:
+    #         service.close()
+    #
+    #     rfp_options = [""] + [r["title"] for r in rfps]
+    #     selected_template = st.selectbox("Template", QUESTION_TEMPLATES)
+    #     selected_rfp = st.selectbox("Project macro (optional)", rfp_options)
+    #     selected_skills = st.multiselect("Skills macro (AND, optional)", all_skills)
+    #
+    #     question_text = selected_template
+    #     if "FinTech RFP" in question_text:
+    #         question_text = question_text.replace("FinTech RFP", selected_rfp or "FinTech RFP")
+    #     if selected_skills:
+    #         if "Python developers" in question_text:
+    #             question_text = question_text.replace(
+    #                 "Python developers", " and ".join(selected_skills) + " developers"
+    #             )
+    #         if "React AND Node.js" in question_text:
+    #             question_text = question_text.replace(
+    #                 "React AND Node.js", " AND ".join(selected_skills)
+    #             )
+    #
+    #     st.text_area("Generated question", question_text, height=80)
 
     with st.sidebar:
         st.subheader("Configuration")
@@ -148,19 +157,20 @@ def render():
 
         st.divider()
         st.subheader("NaiveRAG Embeddings")
-        if st.button("Build embeddings (prep_vectors)"):
+        if st.button("Build candidates embeddings"):
             try:
-                result = subprocess.run(
-                    [sys.executable, "-m", "src.scripts.prep_vectors"],
-                    check=True,
-                    capture_output=True,
-                    text=True,
-                )
-                st.session_state["prep_vectors_log"] = (result.stdout or "").strip()
+                prepare_candidate_embeddings()
+                # result = subprocess.run(
+                #     [sys.executable, "-m", "src.scripts.prep_vectors"],
+                #     check=True,
+                #     capture_output=True,
+                #     text=True,
+                # )
+                # st.session_state["prep_vectors_log"] = (result.stdout or "").strip()
                 st.success("Embeddings created.")
             except subprocess.CalledProcessError as exc:
-                st.session_state["prep_vectors_log"] = (exc.stderr or exc.stdout or "").strip()
-                st.error(f"Embedding prep failed: {exc.stderr or exc.stdout}")
+                # st.session_state["prep_vectors_log"] = (exc.stderr or exc.stdout or "").strip()
+                st.error(f"Embedding prep failed:")
 
         if st.session_state.get("prep_vectors_log"):
             with st.expander("Embedding prep logs"):
